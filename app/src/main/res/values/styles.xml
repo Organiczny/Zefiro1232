@@ -11,6 +11,28 @@
         <item name="android:statusBarColor">@color/backgroundDarker</item>
     </style>
 
+
+
+    <style name="but_type_light">
+        <item name="android:background">@color/but_scroll_bg</item>
+        <item name="android:textColor">@color/but_text</item>
+        <item name="android:textSize">@dimen/textSizeMidium</item>
+        <item name="android:fontFamily">@font/montserrat</item>
+        <item name="android:textAllCaps">false</item>
+        <item name="android:layout_width">140dp</item>
+        <item name="android:layout_height">40dp</item>
+    </style>
+
+    <style name="but_type_lightPressed">
+        <item name="android:background">@color/but_scroll_bg_pressed</item>
+        <item name="android:textColor">@color/but_text</item>
+        <item name="android:textSize">@dimen/textSizeMidium</item>
+        <item name="android:fontFamily">@font/montserrat</item>
+        <item name="android:textAllCaps">false</item>
+        <item name="android:layout_width">140dp</item>
+        <item name="android:layout_height">40dp</item>
+    </style>
+
     <style name="but_scroll">
         <item name="android:background">@color/but_scroll_bg</item>
         <item name="android:textColor">@color/but_text</item>
@@ -59,6 +81,13 @@
 
     <style name="EditText">
         <item name="android:background">@color/et_custom</item>
+        <item name="android:textColor">@color/but_text</item>
+        <item name="android:textSize">@dimen/textSizeNormal</item>
+        <item name="android:fontFamily">@font/montserrat</item>
+        <item name="android:textAllCaps">false</item>
+    </style>
+
+    <style name="TextView">
         <item name="android:textColor">@color/but_text</item>
         <item name="android:textSize">@dimen/textSizeNormal</item>
         <item name="android:fontFamily">@font/montserrat</item>
