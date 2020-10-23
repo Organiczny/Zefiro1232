@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#3E5BFF</color>
+    <color name="colorPrimaryDark">#2E47D6</color>
+    <color name="colorAccent">#526CFF</color>
+
+    <color name="backgroundBasic">#2B2B2B</color>
+    <color name="backgroundDarker">#202020</color>
+    <color name="butBasic">#3E5BFF</color>
+    <color name="butPressed">#24348E</color>
+
+    <color name="icLogin">#FFFFFF</color>
+
+
+    <color name="font">#FFF</color>
+    <color name="butFont">#FFF</color>
+
+</resources>
