@@ -2,9 +2,7 @@ package com.example.zefiro;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -22,7 +20,7 @@ public class Details extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_details);
+        setContentView(R.layout.ac_details);
 
          final Button but_temp = findViewById(R.id.id_but_scroll_temp);
          final Button but_hum = findViewById(R.id.id_but_scroll_hum);

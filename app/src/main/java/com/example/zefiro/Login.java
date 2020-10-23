@@ -18,7 +18,7 @@ import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
 
-import static com.example.zefiro.R.layout.activity_login;
+import static com.example.zefiro.R.layout.ac_login;
 
 public class Login extends AppCompatActivity {
 
@@ -31,7 +31,7 @@ public class Login extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(activity_login);
+        setContentView(ac_login);
 
         et_login = findViewById(R.id.et_login);
         et_pass = findViewById(R.id.et_pass);
