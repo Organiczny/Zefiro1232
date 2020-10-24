@@ -3,6 +3,7 @@ package com.example.zefiro;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
@@ -11,12 +12,15 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import java.io.IOException;
+import java.lang.reflect.Type;
 
 import okhttp3.FormBody;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
+
+import static com.example.zefiro.DataManager.*;
 
 import static com.example.zefiro.R.layout.ac_login;
 
@@ -25,13 +29,14 @@ public class Login extends AppCompatActivity {
     private static final String TAG = "KS:Login";
 
     EditText et_login, et_pass;
-
     String res;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(ac_login);
+
+        autoLogin();
 
         et_login = findViewById(R.id.et_login);
         et_pass = findViewById(R.id.et_pass);
@@ -41,13 +46,25 @@ public class Login extends AppCompatActivity {
             public void onClick(View v) {
                 Log.i(TAG, et_login.getText().toString() + "<=>" + et_pass.getText().toString());
                 new Connection().execute();
-
-//                Intent intent = new Intent(Login.this, Home.class);
-//                intent.putExtra("android", "va11fff");
-//                startActivity(intent);
             }
         });
 
+
+
+    }
+
+    private void autoLogin() {
+        SharedPreferences sp = getSharedPreferences(SHARED_PREFS, MODE_PRIVATE);
+        String login1 = sp.getString(LOGIN,LOGIN_DEF);
+        String pass1 = sp.getString(PASSWORD,PASSWORD_DEF);
+
+        if(login1 != LOGIN_DEF && pass1 != PASSWORD_DEF ) {
+            Log.i(TAG, "autologownie: " + login1 + " " + pass1);
+            Intent intent = new Intent(Login.this, Home.class);
+            startActivity(intent);
+        }else {
+            Log.i(TAG, "brak autologowania");
+        }
 
 
     }
@@ -75,13 +92,17 @@ public class Login extends AppCompatActivity {
             try {
                 response = client.newCall(request).execute();
                 res = response.body().string();
-                Log.i(TAG, '\"' + res + "\" CODE:" + response.code());
-
-//                Typetester t = new Typetester();
-//                t.printType(res);
-
+//                Log.i(TAG, '\"' + res + "\" CODE:" + response.code());
                 if(res.toCharArray()[0] =='1') {
                     Log.i(TAG, "Login succes");
+
+                    SharedPreferences sp = getSharedPreferences(SHARED_PREFS, MODE_PRIVATE);
+                    SharedPreferences.Editor editor = sp.edit();
+
+                    editor.putString(PASSWORD, et_pass.getText().toString() );
+                    editor.putString(LOGIN, et_login.getText().toString());
+                    editor.apply();
+
                     Intent intent = new Intent(Login.this, Home.class);
                     startActivity(intent);
                 }else {

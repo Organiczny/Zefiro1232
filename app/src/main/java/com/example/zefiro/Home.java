@@ -3,19 +3,28 @@ package com.example.zefiro;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.HashMap;
+
+import static com.example.zefiro.DataManager.LED_COLOR;
+import static com.example.zefiro.DataManager.LED_COLOR_DEF;
+import static com.example.zefiro.DataManager.LOGIN;
+import static com.example.zefiro.DataManager.LOGIN_DEF;
+import static com.example.zefiro.DataManager.SHARED_PREFS;
 
 public class Home extends AppCompatActivity {
 
     private static final String TAG = "KS:Home";
     private long backPressTime;
     private Toast backToast;
+    TextView tv_deviceID;
 
     private static HashMap<Button, Integer> buttonList = new HashMap<>();
 
@@ -24,11 +33,10 @@ public class Home extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.ac_home);
 
-        Intent intent = getIntent();
-        String str = intent.getStringExtra("android");
+        tv_deviceID = findViewById(R.id.id_home_tv_deviceId);
 
-//        TextView tv = findViewById(R.id.textView);
-//        tv.setText(str);
+        setStartsData();
+
         findViewById(R.id.but_home_settings).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -92,9 +100,12 @@ public class Home extends AppCompatActivity {
         return returned;
     }
 
+    private void setStartsData() {
+        SharedPreferences sp = getSharedPreferences(SHARED_PREFS, MODE_PRIVATE);
+        SharedPreferences.Editor editor = sp.edit();
 
-
-
+        tv_deviceID.setText(sp.getString(LOGIN, LOGIN_DEF));
+    }
 
     @Override
     public void onBackPressed(){

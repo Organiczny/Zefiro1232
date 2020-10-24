@@ -1,13 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#3E5BFF</color>
-    <color name="colorPrimaryDark">#2E47D6</color>
-    <color name="colorAccent">#526CFF</color>
+    <color name="colorPrimary">#00b5a6 </color>
+    <color name="colorAccent">#01D5C3</color>
+    <color name="colorPrimaryDark">#008378</color>
+    <color name="colorPrimaryDarker">#015E56</color>
 
-    <color name="backgroundBasic">#2B2B2B</color>
+
+    <color name="backgroundBasic">#404040</color>
     <color name="backgroundDarker">#202020</color>
-    <color name="butBasic">#3E5BFF</color>
-    <color name="butPressed">#24348E</color>
+    <color name="butBasic">@color/colorPrimary</color>
+    <color name="butPressed">@color/colorPrimaryDarker</color>
 
     <color name="icLogin">#FFFFFF</color>
 

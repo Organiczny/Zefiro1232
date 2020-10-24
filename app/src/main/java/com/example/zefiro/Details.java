@@ -2,12 +2,30 @@ package com.example.zefiro;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
+import android.content.SharedPreferences;
+import android.os.AsyncTask;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import java.io.IOException;
 import java.util.HashMap;
+import java.util.List;
+
+import okhttp3.FormBody;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.RequestBody;
+import okhttp3.Response;
+
+import static com.example.zefiro.DataManager.LOGIN;
+import static com.example.zefiro.DataManager.LOGIN_DEF;
+import static com.example.zefiro.DataManager.PASSWORD;
+import static com.example.zefiro.DataManager.SHARED_PREFS;
 
 public class Details extends AppCompatActivity {
 
@@ -16,6 +34,9 @@ public class Details extends AppCompatActivity {
 
     private static HashMap<Button, Integer> buttonList1 = new HashMap<>();
     private static HashMap<Button, Integer> buttonList2 = new HashMap<>();
+    private static List<String> DataList;
+
+    String res;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,6 +81,61 @@ public class Details extends AppCompatActivity {
         }
         but_day.performClick();
 
+        graphGenerate();
+
+    }
+
+    private void graphGenerate() {
+        getDataFromBase();
+    }
+
+    private void getDataFromBase() {
+        new Connection().execute();
+//        Log.i(TAG, getButtonName(buttonList2));
+    }
+
+
+    public class Connection extends AsyncTask<Void, Void, Void> {
+
+        @Override
+        protected Void doInBackground(Void ... Void) {
+
+            OkHttpClient client = new OkHttpClient();
+
+            SharedPreferences sp = getSharedPreferences(SHARED_PREFS, MODE_PRIVATE);
+            String deviceID = sp.getString(LOGIN,LOGIN_DEF);
+
+            RequestBody formBody = new FormBody.Builder()
+                    .add("type", getButtonName(buttonList1))
+                    .add("time", getButtonName(buttonList2))
+                    .add("id", deviceID)
+                    .build();
+            Request request = new Request.Builder()
+                    .url("https://zefiro.pl/app/chartdata.php")
+                    .post(formBody)
+                    .build();
+
+            Response response = null;
+            try {
+                response = client.newCall(request).execute();
+                res = response.body().string();
+                Log.i(TAG,  getButtonName(buttonList1) + " " + getButtonName(buttonList2) + " " + '\"' + res + "\" CODE:" + response.code());
+//                Log.i(TAG, getButtonName(buttonList1) + " " + getButtonName(buttonList2));
+
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+            runOnUiThread(new Runnable() {
+                public void run() {
+                    if(res.toCharArray()[0] !='1') Toast.makeText(getApplicationContext(), "Złe hasło", Toast.LENGTH_SHORT).show();
+                }
+            });
+
+            return null;
+        }
+
+
     }
 
     public void onClickButList(final HashMap<Button, Integer> buttonList){
@@ -74,6 +150,7 @@ public class Details extends AppCompatActivity {
                     buttonList.replace(but, 1);
                     but.setBackgroundResource(R.color.but_scroll_bg_pressed);
                     tv.setText(getSelectedButton(buttonList1).getText() + " <=> " + getSelectedButton(buttonList2).getText());
+                    graphGenerate();
 
                 }
             });
@@ -86,6 +163,39 @@ public class Details extends AppCompatActivity {
             if(buttonList.get(but) == 1) returned = but;
         }
         return returned;
+    }
+
+    private String getButtonName(final HashMap<Button, Integer> buttonList) {
+        Button tarBut = getSelectedButton(buttonList);
+        switch (tarBut.getText().toString()) {
+            case "PM 1":
+                return "pm1";
+            case "PM 2.5":
+                return "pm25";
+            case "PM 10":
+                return "pm10";
+            case "WILGOTNOŚĆ":
+                return "humidity";
+            case "TEMP":
+                return "temp";
+            case "CIŚNIENIE":
+                return "pressure";
+
+            case "Dzień":
+                return "1";
+            case "Tydzień":
+                return "7";
+            case "7":
+                return "1";
+            case "Miesiąc":
+                return "30";
+            case "Pół roku":
+                return "180";
+            case "Rok":
+                return "365";
+
+        }
+        return tarBut.getText().toString();
     }
 
 
