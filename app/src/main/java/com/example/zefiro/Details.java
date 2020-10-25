@@ -12,7 +12,14 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.jjoe64.graphview.GraphView;
+import com.jjoe64.graphview.series.DataPoint;
+import com.jjoe64.graphview.series.LineGraphSeries;
+
+import org.json.JSONObject;
+
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
@@ -91,7 +98,6 @@ public class Details extends AppCompatActivity {
 
     private void getDataFromBase() {
         new Connection().execute();
-//        Log.i(TAG, getButtonName(buttonList2));
     }
 
 
@@ -120,19 +126,49 @@ public class Details extends AppCompatActivity {
                 response = client.newCall(request).execute();
                 res = response.body().string();
                 Log.i(TAG,  getButtonName(buttonList1) + " " + getButtonName(buttonList2) + " " + '\"' + res + "\" CODE:" + response.code());
-//                Log.i(TAG, getButtonName(buttonList1) + " " + getButtonName(buttonList2));
+
+
 
             } catch (IOException e) {
                 e.printStackTrace();
             }
 
-            runOnUiThread(new Runnable() {
-                public void run() {
-                    if(res.toCharArray()[0] !='1') Toast.makeText(getApplicationContext(), "Złe hasło", Toast.LENGTH_SHORT).show();
-                }
-            });
-
             return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void result) {
+            DataList  = new ArrayList<String>();
+            res = res.replace("{", "");
+            res = res.replace("}", "");
+            String[] list = res.split(", ");
+            for(int i=0; i<list.length ;i++) {
+                DataList.add(list[i]);
+            }
+
+            GraphView graph = (GraphView) findViewById(R.id.id_details_graph1);
+            graph.removeAllSeries();
+
+            DataPoint[] dataPoints = new DataPoint[DataList.size()];
+
+            for(int i=0; i<DataList.size() ;i++) {
+                dataPoints[i] = new DataPoint(i+1, Double.parseDouble(DataList.get(i)));
+            }
+            LineGraphSeries<DataPoint> series = new LineGraphSeries<>(dataPoints);
+
+            graph.getViewport().setYAxisBoundsManual(false);
+            graph.getViewport().setMinY(0);
+            graph.getViewport().setMaxY(30);
+
+            graph.getViewport().setXAxisBoundsManual(true);
+            graph.getViewport().setMinX(0);
+            graph.getViewport().setMaxX(30);
+
+            // enable scaling and scrolling
+            graph.getViewport().setScalable(true);
+            graph.getViewport().setScalableY(false);
+
+            graph.addSeries(series);
         }
 
 
